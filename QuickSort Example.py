@@ -19,10 +19,8 @@ def quicksort(arr):
     
     return quicksort(left) + middle + quicksort(right)
 
-# Ordenar los números de serie usando Quicksort
 sortedSerialNumbers = quicksort(serialNumbers)
 
-# Imprimir los resultados
 print("Original Sorting Of The Serial Numbers (new products included):")
 print(serialNumbers)
 print("\nSorted Serial Numbers:")
