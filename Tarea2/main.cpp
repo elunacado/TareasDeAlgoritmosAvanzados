@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//Complejidad O(n)
 void merge(vector<double>& theVector, int left, int mid, int right) {
     //numeros de valores en en el vector de la derecha y el numero de valores en el vector de la izquierda
     int numberOFValuesInLeftVector = mid - left + 1;
@@ -45,7 +46,7 @@ void merge(vector<double>& theVector, int left, int mid, int right) {
         k++;
     }
 }
-
+//Complejidad O(log n)
 void mergeSort(vector<double>& theVector, int left, int right) {
     //Cuando el valor de la izquierda sea mayor al de la derecha regresare el vector
     //(Esto solo pasa cuando solo haya un valor en el subVector)
@@ -62,6 +63,7 @@ void mergeSort(vector<double>& theVector, int left, int right) {
     merge(theVector, left, mid, right);
 }
 
+//Complejidad O(n log n)
 int main() {
     // Recibo el número de valores que tendrá dentro el vector
     int numberOfValuesInTheVector = 0;
