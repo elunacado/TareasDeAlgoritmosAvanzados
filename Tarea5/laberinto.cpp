@@ -29,16 +29,6 @@ bool resolverLaberinto(vector<vector<int>> &laberinto, int x, int y, vector<vect
             return true;
         }
 
-        // Moverse hacia arriba
-        if(resolverLaberinto(laberinto, x - 1, y, solucion)){
-            return true;
-        }
-
-        // Moverse hacia la izquierda
-        if(resolverLaberinto(laberinto, x, y - 1, solucion)){
-            return true;
-        }
-
         // Si no se encuentra solución, desmarcar la celda (backtracking)
         solucion[x][y] = 0;
     }
@@ -74,10 +64,10 @@ int main(){
 
     // Intentar resolver el laberinto
     if(resolverLaberinto(laberinto, 0, 0, solucion)){
-        cout << "Solución encontrada:" << endl;
+        cout << endl << "Solución encontrada:" << endl;
         imprimirSolucion(solucion);
     } else {
-        cout << "No se encontró una solución para el laberinto." << endl;
+        cout << endl << "No se encontró una solución para el laberinto." << endl;
     }
 
     return 0;
