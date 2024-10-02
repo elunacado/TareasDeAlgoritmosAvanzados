@@ -26,12 +26,24 @@ def zAlgorithm(string):
                 r -= 1
     return zArray
 
+def generateSuffixArray(string):
+    n = len(string)
+    suffix_array = [i for i in range(n)]
+    suffix_array.sort(key=lambda i: string[i:])
+    return suffix_array
+
+def findLongestPalindrome(string):
+    pass
+
 def mAnalysis(transmissionFiles, mcodeFiles):
-    for x in transmissionFiles:
+
+    transmissionFilesContent = [0] * len(transmissionFiles)
+
+    for x in range(len(transmissionFiles)):
         mCodeFound = False
-        with open(x, 'r') as tF:
-            transmissionContent = tF.read()
-            print("Archivo analizado: " + x + "\n")
+        with open(transmissionFiles[x], 'r') as tF:
+            transmissionFilesContent[x] = tF.read()
+            print("\nArchivo analizado: " + transmissionFiles[x] + "\n")
             
             for m in mcodeFiles:
                 print("Comparado contra: " + m + "\n")
@@ -39,7 +51,7 @@ def mAnalysis(transmissionFiles, mcodeFiles):
                     mcodeContent = mF.read()
                     
                     # Combine the pattern and string to pass it to the Z Algorithm function
-                    combinedText = mcodeContent + '$' + transmissionContent
+                    combinedText = mcodeContent + '$' + transmissionFilesContent[x]
                     
                     zArray = zAlgorithm(combinedText)
                     
@@ -50,6 +62,14 @@ def mAnalysis(transmissionFiles, mcodeFiles):
                             print(f"[True] El código se encontró entre las siguientes posiciones: {pos}, {pos + len(mcodeContent) - 1} \n")
                     if(mCodeFound != True):
                         print("[False] El código no se encontró en el archivo \n")
+
+    for i, content in enumerate(transmissionFilesContent):
+        # startPos, finalPos = findLongestPalindrome(content)
+        print("\nCódigo espejeado (palíndromo) más grande encontrado en: " + transmissionFiles[i] + "\n")
+        # print(f"Posición Inicial: {startPos} Posición Final: {finalPos}\n")
+
+
+
 
         
 mAnalysis(transmissionFiles, mcodeFiles)
