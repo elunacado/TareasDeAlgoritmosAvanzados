@@ -118,7 +118,7 @@ def m_analysis(transmission_files, mcode_files):
                 print("Comparado contra: " + mcode + "\n")
                 with open(mcode, 'r') as mcode_file:
                     mcode_content = mcode_file.read().strip()  # Leemos el archivo mcode y eliminamos espacios en blanco
-             
+            
                     # Combinamos el mcode con la transmisión para aplicar el algoritmo Z
                     combined_text = mcode_content + '$' + transmission_files_content[x]
                     z_array = z_algorithm(combined_text)  # Aplicamos el algoritmo Z
