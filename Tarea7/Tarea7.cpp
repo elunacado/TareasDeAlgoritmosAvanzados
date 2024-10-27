@@ -41,11 +41,12 @@ void dijkstra(vector<vector<int>>& grafo, int src, int dist[]) {
 }
 
 void printDistances(int dist[], int src) {
-    cout << "Distancia desde el vertice " << src << endl;
+    cout << endl << endl << "Distancia desde el vertice " << (src + 1) << endl;
     for (int i = 0; i < V; i++) {
-        cout << "To node " << i << ": " << dist[i] << endl;
+        if(src != i){
+            cout << "To node " << (i + 1) << ": " << dist[i] << endl;
+        }
     }
-    cout << endl;
 }
 
 int main() {
@@ -64,7 +65,6 @@ int main() {
 
     for (int i = 0; i < V; i++) {
         int dist[V];
-        cout << "\nCalculating shortest paths from vertex " << i << "...\n";
         dijkstra(graph, i, dist);
         printDistances(dist, i);
     }
