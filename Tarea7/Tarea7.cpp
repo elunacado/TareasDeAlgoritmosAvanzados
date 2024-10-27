@@ -90,6 +90,7 @@ int main() {
         }
     }
 
+    cout << "\nAlgoritmo Dijkstra: \n";
     for (int i = 0; i < numVertices; i++) {
         int distances[numVertices];
         dijkstra(graph, i, distances);
