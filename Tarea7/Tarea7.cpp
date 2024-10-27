@@ -49,13 +49,41 @@ void printDistances(int distances[], int source) {
     }
 }
 
+vector<vector<int>> floyd(vector<vector<int>>& graph) {
+    vector<vector<int>> distances = graph;
+
+    for(int i = 0; i < graph.size(); i++){
+        for(int j = 0; j < graph[i].size(); j++){
+            if(graph[i][j] == -1){
+                distances[i][j] = INF;
+            } if(i == j){
+                distances[i][j] = 0;
+            }
+        }
+    }
+
+    for (int k = 0; k < numVertices; k++) {
+        for(int i = 0; i < numVertices; i++){
+            for(int j = 0; j < numVertices; j++){
+                if (distances[i][j] > (distances[i][k] + distances[k][j])
+                    && (distances[k][j] != INF
+                        && distances[i][k] != INF))
+                    distances[i][j] = distances[i][k] + distances[k][j];
+            }
+        }
+    }
+
+    return distances;
+
+}
+
 int main() {
-    cout << "Enter the number of vertices in the graph: ";
+    cout << "Ingresa el número de vértices en el grafos: ";
     cin >> numVertices;
 
     vector<vector<int>> graph(numVertices, vector<int>(numVertices, 0));
 
-    cout << "Enter the adjacency matrix (enter -1 if there's no direct path):\n";
+    cout << "Ingresa la matriz de adyacencia (ingresa -1 si no hay un camino directo):\n";
     for (int i = 0; i < numVertices; i++) {
         for (int j = 0; j < numVertices; j++) {
             cin >> graph[i][j];
@@ -66,6 +94,19 @@ int main() {
         int distances[numVertices];
         dijkstra(graph, i, distances);
         printDistances(distances, i);
+    }
+
+    vector<vector<int>> floydDistances = floyd(graph);
+    cout << "\nAlgoritmo Floyd-Warshall: \n";
+    for(int i = 0; i < floydDistances.size(); i++){
+        for(int j = 0; j < floydDistances[i].size(); j++){
+            if(floydDistances[i][j] == INF) {
+                cout << "INF ";
+            } else {
+                cout << floydDistances[i][j] << " ";
+            }
+        }
+        cout << endl;
     }
 
     return 0;
