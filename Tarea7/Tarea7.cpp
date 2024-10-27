@@ -4,69 +4,68 @@ using namespace std;
 
 #define INF 99999
 
-int V; // Declarar V globalmente
+int numVertices; // Número de vértices en el grafo
 
-int distanciaMinima(int dist[], bool sptSet[]) {
-    int min = INF, min_index = -1;
+int findMinDistance(int distances[], bool processedSet[]) {
+    int minDistance = INF, minIndex = -1;
 
-    for (int v = 0; v < V; v++) {
-        if (!sptSet[v] && dist[v] <= min) {
-            min = dist[v];
-            min_index = v;
+    for (int vertex = 0; vertex < numVertices; vertex++) {
+        if (!processedSet[vertex] && distances[vertex] <= minDistance) {
+            minDistance = distances[vertex];
+            minIndex = vertex;
         }
     }
-    return min_index;
+    return minIndex;
 }
 
-void dijkstra(vector<vector<int>>& grafo, int src, int dist[]) {
-    bool sptSet[V];
+void dijkstra(vector<vector<int>>& graph, int source, int distances[]) {
+    bool processedSet[numVertices];
 
-    for (int i = 0; i < V; i++) {
-        dist[i] = INF;
-        sptSet[i] = false;
+    for (int i = 0; i < numVertices; i++) {
+        distances[i] = INF;
+        processedSet[i] = false;
     }
 
-    dist[src] = 0;
+    distances[source] = 0;
 
-    for (int count = 0; count < V - 1; count++) {
-        int indiceMasCercano = distanciaMinima(dist, sptSet);
-        sptSet[indiceMasCercano] = true;
+    for (int count = 0; count < numVertices - 1; count++) {
+        int nearestIndex = findMinDistance(distances, processedSet);
+        processedSet[nearestIndex] = true;
 
-        for (int v = 0; v < V; v++) {
-            if (!sptSet[v] && grafo[indiceMasCercano][v] != -1 && dist[indiceMasCercano] != INF && dist[indiceMasCercano] + grafo[indiceMasCercano][v] < dist[v]) {
-                dist[v] = dist[indiceMasCercano] + grafo[indiceMasCercano][v];
+        for (int vertex = 0; vertex < numVertices; vertex++) {
+            if (!processedSet[vertex] && graph[nearestIndex][vertex] != -1 && distances[nearestIndex] + graph[nearestIndex][vertex] < distances[vertex]) {
+                distances[vertex] = distances[nearestIndex] + graph[nearestIndex][vertex];
             }
         }
     }
 }
 
-void printDistances(int dist[], int src) {
-    cout << endl << endl << "Distancia desde el vertice " << (src + 1) << endl;
-    for (int i = 0; i < V; i++) {
-        if(src != i){
-            cout << "To node " << (i + 1) << ": " << dist[i] << endl;
+void printDistances(int distances[], int source) {
+    cout << "\n\nDistancia desde el vértice " << (source + 1) << endl;
+    for (int i = 0; i < numVertices; i++) {
+        if (source != i) {
+            cout << "To node " << (i + 1) << ": " << distances[i] << endl;
         }
     }
 }
 
 int main() {
     cout << "Enter the number of vertices in the graph: ";
-    cin >> V;
+    cin >> numVertices;
 
-    vector<vector<int>> graph(V, vector<int>(V, 0));
+    vector<vector<int>> graph(numVertices, vector<int>(numVertices, 0));
 
     cout << "Enter the adjacency matrix (enter -1 if there's no direct path):\n";
-    for (int i = 0; i < V; i++) {
-        for (int j = 0; j < V; j++) {
-            cout << "Edge from " << i << " to " << j << ": ";
+    for (int i = 0; i < numVertices; i++) {
+        for (int j = 0; j < numVertices; j++) {
             cin >> graph[i][j];
         }
     }
 
-    for (int i = 0; i < V; i++) {
-        int dist[V];
-        dijkstra(graph, i, dist);
-        printDistances(dist, i);
+    for (int i = 0; i < numVertices; i++) {
+        int distances[numVertices];
+        dijkstra(graph, i, distances);
+        printDistances(distances, i);
     }
 
     return 0;
