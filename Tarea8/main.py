@@ -40,7 +40,7 @@ def knapsack(numElements, itemValues, itemWeights, maxWeight):
     # Complejidad de tiempo: O(maxWeight)
     print("Matriz generada:")
     for w in range(maxWeight + 1):
-        print(f"Peso {w}", dpMatrix[w])
+        print(f"W {w}", dpMatrix[w])
     
     return maxBenefit
 
