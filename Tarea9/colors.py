@@ -1,5 +1,6 @@
 #Verifica que las reglas se esten respetando
 # 2 colores juntos no esta permitido
+# Complejidad: O(n), donde n es el número de nodos
 def es_seguro(nodo, grafo, colores, color):
     for i in range(len(grafo)):
         if grafo[nodo][i] == 1 and colores[i] == color:
@@ -7,6 +8,7 @@ def es_seguro(nodo, grafo, colores, color):
     return True
 
 # Función para colorear el grafo (grafo, número de colores, colores_temporalmente_asignados, nodo)
+# Complejidad: O(c^n), donde c es el número de colores y n es el número de nodos
 def colorear_grafo(grafo, num_colores, colores, nodo):
     # Si todos los nodos han sido coloreados
     # Se llama el termino de la función  
@@ -29,6 +31,7 @@ def colorear_grafo(grafo, num_colores, colores, nodo):
     return False  # Retorna False si no se puede colorear el grafo
 
 # Función principal
+# Complejidad: O(n^2) debido a la entrada de la matriz de adyacencias
 def main():
     n = int(input("Ingrese el número de nodos: "))
 
