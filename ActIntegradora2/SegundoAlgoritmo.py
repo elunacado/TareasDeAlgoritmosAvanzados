@@ -1,26 +1,40 @@
 from sys import maxsize
 from itertools import permutations
 
-#
+#Funcion para encontrar el camino mas corto
 def colonyTravel(graph, start):
     #Asignamos letras a las colonias
+    """
+        Para el caso actual hay 4 filas en el txt en la matriz de adyacencia
+        por lo que las letras de los nodos seran de A : D
+    """
     num_colonies = len(graph)
     nodes = [chr(65 + i) for i in range(num_colonies)]
-
-    # Lista de colonias excluyendo la de inicio
-    vertices = [i for i in range(num_colonies) if i != start]
 
     # Variables para almacenar el peso mínimo y el recorrido óptimo
     min_path = maxsize
     optimal_path = []
 
+    # Lista de colonias excluyendo la de inicio
+    """
+        Como ya tenemos el punto de salida del tecnico, se excluye de la lista de colonias
+        por que ya lo conocemos
+    """
+    vertices = [i for i in range(num_colonies) if i != start]
+
     # Genera todas las combinaciones posibles de las colonias
     for perm in permutations(vertices):
+        """
+            El viaje inicia en la colonia A, por lo que se agrega al inicio de la lista
+            se toma la primera combinacion de colonias y se agrega al final de la lista
+            despes se vuelve a agregar la colonia 0 para cerrar el ciclo
+        """
         current_travel = 0
-        current_path = [start] + list(perm) + [start]  # salimos de casa, tomamos el camino mas corto y volvemos
+        current_path = [start] + list(perm) + [start]
 
-        # Calcula el peso del camino actual le restamos 1 porque el camino es circular
+        # Calcula el peso del camino actual le restamos 1 porque queremos empezar desde el 0
         for i in range(len(current_path) - 1):
+            #Calculamos el peso del viaje
             current_travel += graph[current_path[i]][current_path[i + 1]]
 
         # Si el peso del camino actual es menor que el mínimo, actualiza min_path y guarda el camino
