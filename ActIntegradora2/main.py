@@ -100,15 +100,15 @@ def main():
 
     grafoDistancias = np.array(grafoDistancias)
 
-    # Problema 1: Calcular la ruta óptima de visita a colonias
+    # Problema 1: Calcular el MST para cableado óptimo
+    calcularMst(grafoDistancias, numColonias)
+
+    # Problema 2: Calcular la ruta óptima de visita a colonias
     start_colony = 0
     min_cost, path = colonyTravel(grafoDistancias, start_colony)
     print("\nRuta de visita a colonias:")
     print(f"Costo mínimo: {min_cost}")
-    print(f"Recorrido óptimo: {' -> '.join(path)}")
-
-    # Problema 2: Calcular el MST para cableado óptimo
-    calcularMst(grafoDistancias, numColonias)
+    print(f"Recorrido óptimo: {' -> '.join(path)}\n")
 
 if __name__ == "__main__":
     main()
