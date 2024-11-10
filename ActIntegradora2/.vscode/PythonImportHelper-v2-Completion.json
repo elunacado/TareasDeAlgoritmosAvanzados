@@ -1,0 +1,142 @@
+[
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "maxsize",
+        "importPath": "sys",
+        "description": "sys",
+        "isExtraImport": true,
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "maxsize",
+        "importPath": "sys",
+        "description": "sys",
+        "isExtraImport": true,
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "permutations",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
+        "documentation": {}
+    },
+    {
+        "label": "permutations",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "colonyTravel",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def colonyTravel(graph, start):\n    \"\"\"\n    Calcula la ruta óptima para visitar cada colonia una vez y regresar al inicio.\n    \"\"\"\n    num_colonies = len(graph)\n    nodes = [chr(65 + i) for i in range(num_colonies)]  # Nombres de las colonias (A, B, C...)\n    min_path = maxsize\n    optimal_path = []\n    vertices = [i for i in range(num_colonies) if i != start]\n    for perm in permutations(vertices):",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "encontrarLlaveMinima",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):\n    \"\"\"\n    Encuentra la colonia con el valor de llave mínimo que aún no está incluida en el MST.\n    \"\"\"\n    valorMinimo = sys.maxsize\n    indiceMinimo = -1\n    for colonia in range(numColonias):\n        if not incluidoEnMst[colonia] and valoresLlave[colonia] < valorMinimo:\n            valorMinimo = valoresLlave[colonia]\n            indiceMinimo = colonia",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "mostrarMst",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def mostrarMst(coloniaPadre, grafoDistancias, numColonias):\n    \"\"\"\n    Imprime las conexiones (aristas) y pesos del Árbol de Expansión Mínima (MST).\n    \"\"\"\n    print(\"\\nCableado óptimo de fibra óptica:\")\n    print(\"Conexión \\tDistancia\")\n    for colonia in range(1, numColonias):\n        print(f\"{chr(coloniaPadre[colonia] + 65)} - {chr(colonia + 65)} \\t{grafoDistancias[colonia][coloniaPadre[colonia]]} km\")\ndef calcularMst(grafoDistancias, numColonias):\n    \"\"\"",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "calcularMst",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def calcularMst(grafoDistancias, numColonias):\n    \"\"\"\n    Calcula el Árbol de Expansión Mínima (MST) usando el Algoritmo de Prim.\n    \"\"\"\n    valoresLlave = [sys.maxsize] * numColonias\n    coloniaPadre = [-1] * numColonias\n    incluidoEnMst = [False] * numColonias\n    valoresLlave[0] = 0\n    for _ in range(numColonias - 1):\n        u = encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias)",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def main():\n    \"\"\"\n    Función principal para ejecutar ambos problemas:\n    1. Calcular la ruta óptima para visitar cada colonia exactamente una vez.\n    2. Encontrar el Árbol de Expansión Mínima (MST) para cableado óptimo.\n    \"\"\"\n    with open(\"input.txt\", \"r\") as archivoEntrada:\n        numColonias = int(archivoEntrada.readline().strip())\n        grafoDistancias = []\n        for _ in range(numColonias):",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "encontrarLlaveMinima",
+        "kind": 2,
+        "importPath": "PrimAlgorithm",
+        "description": "PrimAlgorithm",
+        "peekOfCode": "def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):\n    \"\"\"\n    Encuentra la colonia con el valor de llave mínimo que aún no está incluida en el MST.\n    Parámetros:\n        valoresLlave (lista): El peso de la conexión más corta a cada colonia.\n        incluidoEnMst (lista): Indica si una colonia está incluida en el MST.\n        numColonias (int): El número total de colonias.\n    Retorna:\n        int: El índice de la colonia con el valor de llave mínimo.\n    \"\"\"",
+        "detail": "PrimAlgorithm",
+        "documentation": {}
+    },
+    {
+        "label": "mostrarMst",
+        "kind": 2,
+        "importPath": "PrimAlgorithm",
+        "description": "PrimAlgorithm",
+        "peekOfCode": "def mostrarMst(coloniaPadre, grafoDistancias, numColonias):\n    \"\"\"\n    Imprime las conexiones (aristas) y pesos del Árbol de Expansión Mínima (MST).\n    Parámetros:\n        coloniaPadre (lista): Almacena la colonia padre para cada colonia en el MST.\n        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.\n        numColonias (int): El número total de colonias.\n    \"\"\"\n    print(\"Conexión \\tDistancia\")\n    for colonia in range(1, numColonias):",
+        "detail": "PrimAlgorithm",
+        "documentation": {}
+    },
+    {
+        "label": "calcularMst",
+        "kind": 2,
+        "importPath": "PrimAlgorithm",
+        "description": "PrimAlgorithm",
+        "peekOfCode": "def calcularMst(grafoDistancias, numColonias):\n    \"\"\"\n    Calcula el Árbol de Expansión Mínima (MST) usando el Algoritmo de Prim.\n    Parámetros:\n        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.\n        numColonias (int): El número total de colonias.\n    \"\"\"\n    valoresLlave = [sys.maxsize] * numColonias  # Valores iniciales grandes\n    coloniaPadre = [-1] * numColonias           # Almacena el MST\n    incluidoEnMst = [False] * numColonias       # Controla las colonias incluidas",
+        "detail": "PrimAlgorithm",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "PrimAlgorithm",
+        "description": "PrimAlgorithm",
+        "peekOfCode": "def main():\n    \"\"\"\n    Función principal para leer el archivo de entrada, construir el grafo de distancias y calcular el MST.\n    \"\"\"\n    with open(\"input.txt\", \"r\") as archivoEntrada:\n        numColonias = int(archivoEntrada.readline().strip())  # Lee el número de colonias\n        grafoDistancias = []\n        for _ in range(numColonias):\n            fila = list(map(int, archivoEntrada.readline().strip().split()))\n            grafoDistancias.append(fila)",
+        "detail": "PrimAlgorithm",
+        "documentation": {}
+    },
+    {
+        "label": "colonyTravel",
+        "kind": 2,
+        "importPath": "SegundoAlgoritmo",
+        "description": "SegundoAlgoritmo",
+        "peekOfCode": "def colonyTravel(graph, start):\n    #Asignamos letras a las colonias\n    \"\"\"\n        Para el caso actual hay 4 filas en el txt en la matriz de adyacencia\n        por lo que las letras de los nodos seran de A : D\n    \"\"\"\n    num_colonies = len(graph)\n    nodes = [chr(65 + i) for i in range(num_colonies)]\n    # Variables para almacenar el peso mínimo y el recorrido óptimo\n    min_path = maxsize",
+        "detail": "SegundoAlgoritmo",
+        "documentation": {}
+    }
+]
