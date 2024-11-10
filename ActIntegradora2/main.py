@@ -6,6 +6,7 @@
 # Luego calcula la cantidad mínima de cable necesario para conectar todas las colonias usando el Algoritmo de Prim.
 
 from sys import maxsize
+import numpy as np
 from itertools import permutations
 from collections import deque
 import sys
@@ -130,6 +131,7 @@ def main():
     Función principal para ejecutar ambos problemas:
     1. Calcular la ruta óptima para visitar cada colonia exactamente una vez.
     2. Encontrar el Árbol de Expansión Mínima (MST) para cableado óptimo.
+    3. Calcular el flujo máximo de información entre el nodo inicial y final.
     """
     with open("input.txt", "r") as archivoEntrada:
         numColonias = int(archivoEntrada.readline().strip())
@@ -145,8 +147,8 @@ def main():
             grafoCapacidades.append(fila)
 
     grafoDistancias = np.array(grafoDistancias)
-    grafoCapacidades = np.array(grafoCapacidades)
-
+    grafoCapacidades = np.array(grafoCapacidades)    
+    
     # Problema 1: Calcular el MST para cableado óptimo
     calcularMst(grafoDistancias, numColonias)
 
