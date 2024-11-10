@@ -10,35 +10,7 @@ from itertools import permutations
 import numpy as np
 import sys
 
-# Función para calcular el camino más corto que visita cada colonia exactamente una vez (Problema 1)
-def colonyTravel(graph, start):
-    """
-    Calcula la ruta óptima para visitar cada colonia una vez y regresar al inicio.
-    """
-    num_colonies = len(graph)
-    nodes = [chr(65 + i) for i in range(num_colonies)]  # Nombres de las colonias (A, B, C...)
-
-    min_path = maxsize
-    optimal_path = []
-
-    vertices = [i for i in range(num_colonies) if i != start]
-
-    for perm in permutations(vertices):
-        current_travel = 0
-        current_path = [start] + list(perm) + [start]
-
-        for i in range(len(current_path) - 1):
-            current_travel += graph[current_path[i]][current_path[i + 1]]
-
-        if current_travel < min_path:
-            min_path = current_travel
-            optimal_path = current_path
-
-    optimal_path_names = [nodes[i] for i in optimal_path]
-
-    return min_path, optimal_path_names
-
-# Función para encontrar el árbol de expansión mínima (Problema 2)
+# Función para encontrar el árbol de expansión mínima (Problema 1)
 def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
     """
     Encuentra la colonia con el valor de llave mínimo que aún no está incluida en el MST.
@@ -82,6 +54,34 @@ def calcularMst(grafoDistancias, numColonias):
                 valoresLlave[v] = grafoDistancias[u][v]
 
     mostrarMst(coloniaPadre, grafoDistancias, numColonias)
+
+# Función para calcular el camino más corto que visita cada colonia exactamente una vez (Problema 2)
+def colonyTravel(graph, start):
+    """
+    Calcula la ruta óptima para visitar cada colonia una vez y regresar al inicio.
+    """
+    num_colonies = len(graph)
+    nodes = [chr(65 + i) for i in range(num_colonies)]  # Nombres de las colonias (A, B, C...)
+
+    min_path = maxsize
+    optimal_path = []
+
+    vertices = [i for i in range(num_colonies) if i != start]
+
+    for perm in permutations(vertices):
+        current_travel = 0
+        current_path = [start] + list(perm) + [start]
+
+        for i in range(len(current_path) - 1):
+            current_travel += graph[current_path[i]][current_path[i + 1]]
+
+        if current_travel < min_path:
+            min_path = current_travel
+            optimal_path = current_path
+
+    optimal_path_names = [nodes[i] for i in optimal_path]
+
+    return min_path, optimal_path_names
 
 # Función principal
 def main():
