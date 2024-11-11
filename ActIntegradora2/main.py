@@ -133,6 +133,9 @@ def ford_fulkerson(capacity, source, sink):
 def findingShortestDistanceToColony(plants, newPlant, limit = 1000):
     """
     Encuentra la central más cercana a la nueva contratación
+    Esto se realiza utilizando la búsqueda lineal mediante la fórmula de distancia euclideana
+    O un KD Tree en el caso de que la cantidad de centrales sea mayor al límite establecido
+    Al combinar ambos algoritmos se busca mantener la mejor complejidad temporal en cualquier caso
     
     Si el número de centrales es menor al límite seleccionado utiliza búsqueda lineal
     Si el número de centrales es mayor o igual al límite, utiliza un KD Tree
