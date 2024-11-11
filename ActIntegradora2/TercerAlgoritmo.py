@@ -2,8 +2,16 @@ from collections import deque
 from itertools import permutations
 import numpy as np
 
-# BFS para encontrar un camino aumentante en el grafo de capacidad residual
-def bfs(capacity, source, sink, parent):
+""" 
+BFS para encontrar un camino aumentante en el grafo de capacidad residual.
+Parámetros:
+- capacity: matriz que representa la capacidad residual entre colonias.
+- source: nodo de origen para la búsqueda.
+- sink: nodo de destino para la búsqueda.
+- parent: lista que registra el camino encontrado.
+Retorno: True si se encuentra un camino aumentante, False en caso contrario.
+"""
+def bfsFlowMax(capacity, source, sink, parent):
     visited = [False] * len(capacity)
     queue = deque([source])
     visited[source] = True
@@ -20,30 +28,41 @@ def bfs(capacity, source, sink, parent):
                     return True
     return False
 
-# Algoritmo Ford-Fulkerson para calcular el flujo máximo
-def ford_fulkerson(capacity, source, sink):
+""" 
+Algoritmo Ford-Fulkerson para calcular el flujo máximo.
+Parámetros:
+- capacity: matriz que representa la capacidad entre colonias.
+- source: nodo de origen para el flujo.
+- sink: nodo de destino para el flujo.
+Retorno: valor del flujo máximo.
+"""
+def fordFulkersonFlowMax(capacity, source, sink):
     parent = [-1] * len(capacity)
-    max_flow = 0
+    maxFlow = 0
     
-    while bfs(capacity, source, sink, parent):
-        path_flow = float('Inf')
+    while bfsFlowMax(capacity, source, sink, parent):
+        pathFlow = float('Inf')
         s = sink
         while s != source:
-            path_flow = min(path_flow, capacity[parent[s]][s])
+            pathFlow = min(pathFlow, capacity[parent[s]][s])
             s = parent[s]
         
         v = sink
         while v != source:
             u = parent[v]
-            capacity[u][v] -= path_flow
-            capacity[v][u] += path_flow
+            capacity[u][v] -= pathFlow
+            capacity[v][u] += pathFlow
             v = parent[v]
         
-        max_flow += path_flow
+        maxFlow += pathFlow
     
-    return max_flow
+    return maxFlow
 
-# Función principal
+""" 
+Función principal para la ejecución del programa.
+Lee un archivo de entrada con el número de colonias, la matriz de capacidades de flujo y la matriz de capacidades máximas de transmisión.
+Calcula y muestra el flujo máximo de información para cada par de colonias.
+"""
 def main():
     with open("input.txt", "r") as archivoEntrada:
         # Leer el número de colonias
@@ -55,20 +74,20 @@ def main():
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoCapacidades.append(fila)
         
-        # Capacidades maximas de transmision
+        # Leer las capacidades máximas de transmisión
         grafoCapTransmision = []
         for _ in range(numColonias):
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoCapTransmision.append(fila)
                 
-        grafoCapacidades    = np.array(grafoCapacidades)
+        grafoCapacidades = np.array(grafoCapacidades)
         grafoCapTransmision = np.array(grafoCapTransmision)
 
-    for perm in permutations(np.arange(numColonias),2):
-        source = perm[0]  # Nodo inicial
-        sink   = perm[1]  # Nodo final
-        max_flow = ford_fulkerson(grafoCapTransmision, source, sink)
-        print(f"El flujo máximo de información desde el nodo inicial {source} al nodo final {sink} es: {max_flow}")
-        
+    for perm in permutations(np.arange(numColonias), 2):
+        source = perm[0]
+        sink = perm[1] 
+        maxFlow = fordFulkersonFlowMax(grafoCapTransmision, source, sink)
+        print(f"El flujo máximo de información desde el nodo inicial {source} al nodo final {sink} es: {maxFlow}")
+
 if __name__ == "__main__":
     main()
