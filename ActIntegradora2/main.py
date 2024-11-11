@@ -4,6 +4,8 @@
 # Descripción: Este programa lee una matriz de adyacencia que representa distancias entre colonias.
 # Primero calcula la ruta más corta para visitar cada colonia una vez y regresar al punto de origen.
 # Luego calcula la cantidad mínima de cable necesario para conectar todas las colonias usando el Algoritmo de Prim.
+# Posteriormente a esto calcula el flujo máximo de información del nodo inicial al nodo final
+# Y finalmente calcula la distancia más corta entre la central nueva y la más cercana que ya se tenga.
 
 from sys import maxsize
 import numpy as np
@@ -129,6 +131,23 @@ def ford_fulkerson(capacity, source, sink):
 
 # Algoritmo para encontrar la distancia más corta entre dos centrales en base a la cantidad de centrales que se tengan
 def findingShortestDistanceToColony(plants, newPlant, limit = 1000):
+    """
+    Encuentra la central más cercana a la nueva contratación
+    Esto se realiza utilizando la búsqueda lineal mediante la fórmula de distancia euclideana
+    O un KD Tree en el caso de que la cantidad de centrales sea mayor al límite establecido
+    Al combinar ambos algoritmos se busca mantener la mejor complejidad temporal en cualquier caso
+    
+    Si el número de centrales es menor al límite seleccionado utiliza búsqueda lineal
+    Si el número de centrales es mayor o igual al límite, utiliza un KD Tree
+    
+    Parameters:
+    - plants: lista de tuplas que representan las coordenadas de las centrales (x, y)
+    - newPlant: tupla que representa la ubicación de la nueva contratación (nx, ny)
+    - limit: número de puntos / cantidad de centrales a partir del cual se decide usar KD Tree
+    
+    Return:
+    - La distancia más corta y las coordenadas de la central más cercana
+    """
     if len(plants) < limit:
         minDistance = float('inf')
         closestPlant = None
@@ -196,7 +215,7 @@ def main():
     source = 0  # Nodo inicial
     sink = numColonias - 1  # Nodo final
     max_flow = ford_fulkerson(grafoCapacidades, source, sink)
-    print(f"El flujo máximo de información desde el nodo inicial al nodo final es: {max_flow}")
+    print(f"El flujo máximo de información desde el nodo inicial al nodo final es: {max_flow}\n")
 
     # Problema 4: Encontrar la distancia más corta entre dos puntos
     distance, closestPlant = findingShortestDistanceToColony(plants, newPlant)
