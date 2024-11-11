@@ -50,6 +50,14 @@
         "documentation": {}
     },
     {
+        "label": "permutations",
+        "importPath": "itertools",
+        "description": "itertools",
+        "isExtraImport": true,
+        "detail": "itertools",
+        "documentation": {}
+    },
+    {
         "label": "deque",
         "importPath": "collections",
         "description": "collections",
@@ -63,6 +71,32 @@
         "description": "collections",
         "isExtraImport": true,
         "detail": "collections",
+        "documentation": {}
+    },
+    {
+        "label": "KDTree",
+        "importPath": "scipy.spatial",
+        "description": "scipy.spatial",
+        "isExtraImport": true,
+        "detail": "scipy.spatial",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "calcularDistancias",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def calcularDistancias(grafoDistancias, numColonias):\n    \"\"\"\n    Imprime las distancias entre cada par de colonias en un formato legible.\n    Parámetros:\n        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.\n        numColonias (int): El número total de colonias.\n    \"\"\"\n    print(\"Número de nodos:\", numColonias)\n    print(\"\\nKms de colonia a colonia\\n\")\n    n = grafoDistancias.shape[0]",
+        "detail": "main",
         "documentation": {}
     },
     {
@@ -120,20 +154,29 @@
         "documentation": {}
     },
     {
-        "label": "main",
+        "label": "findingShortestDistanceToColony",
         "kind": 2,
         "importPath": "main",
         "description": "main",
-        "peekOfCode": "def main():\n    \"\"\"\n    Función principal para ejecutar ambos problemas:\n    1. Calcular la ruta óptima para visitar cada colonia exactamente una vez.\n    2. Encontrar el Árbol de Expansión Mínima (MST) para cableado óptimo.\n    3. Calcular el flujo máximo de información entre el nodo inicial y final.\n    \"\"\"\n    with open(\"input.txt\", \"r\") as archivoEntrada:\n        numColonias = int(archivoEntrada.readline().strip())\n        grafoDistancias = []",
+        "peekOfCode": "def findingShortestDistanceToColony(plants, newPlant, limit = 1000):\n    \"\"\"\n    Encuentra la central más cercana a la nueva contratación\n    Esto se realiza utilizando la búsqueda lineal mediante la fórmula de distancia euclideana\n    O un KD Tree en el caso de que la cantidad de centrales sea mayor al límite establecido\n    Al combinar ambos algoritmos se busca mantener la mejor complejidad temporal en cualquier caso\n    Si el número de centrales es menor al límite seleccionado utiliza búsqueda lineal\n    Si el número de centrales es mayor o igual al límite, utiliza un KD Tree\n    Parameters:\n    - plants: lista de tuplas que representan las coordenadas de las centrales (x, y)",
         "detail": "main",
         "documentation": {}
     },
     {
-        "label": "imprimirDistancias",
+        "label": "main",
+        "kind": 2,
+        "importPath": "main",
+        "description": "main",
+        "peekOfCode": "def main():\n    \"\"\"\n    Función principal para ejecutar ambos problemas:\n    1. Calcular la ruta óptima para visitar cada colonia exactamente una vez.\n    2. Encontrar el Árbol de Expansión Mínima (MST) para cableado óptimo.\n    3. Calcular el flujo máximo de información entre el nodo inicial y final.\n    4. Encontrar la distancia más corta entre la nueva contratación y las centrales existentes.\n    \"\"\"\n    with open(\"input.txt\", \"r\") as archivoEntrada:\n        numColonias = int(archivoEntrada.readline().strip())",
+        "detail": "main",
+        "documentation": {}
+    },
+    {
+        "label": "calcularDistancias",
         "kind": 2,
         "importPath": "PrimAlgorithm",
         "description": "PrimAlgorithm",
-        "peekOfCode": "def imprimirDistancias(grafoDistancias, numColonias):\n    \"\"\"\n    Imprime las distancias entre cada par de colonias en un formato legible.\n    Parámetros:\n        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.\n        numColonias (int): El número total de colonias.\n    \"\"\"\n    print(\"Número de nodos:\", numColonias)\n    print(\"\\nKms de colonia a colonia\\n\")\n    for i in range(numColonias):",
+        "peekOfCode": "def calcularDistancias(grafoDistancias, numColonias):\n    \"\"\"\n    Imprime las distancias entre cada par de colonias en un formato legible.\n    Parámetros:\n        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.\n        numColonias (int): El número total de colonias.\n    \"\"\"\n    print(\"Número de nodos:\", numColonias)\n    print(\"\\nKms de colonia a colonia\\n\")\n    n = grafoDistancias.shape[0]",
         "detail": "PrimAlgorithm",
         "documentation": {}
     },
@@ -174,29 +217,38 @@
         "documentation": {}
     },
     {
-        "label": "colonyTravel",
+        "label": "calcularDistancias",
         "kind": 2,
         "importPath": "SegundoAlgoritmo",
         "description": "SegundoAlgoritmo",
-        "peekOfCode": "def colonyTravel(graph, start):\n    #Asignamos letras a las colonias\n    \"\"\"\n        Para el caso actual hay 4 filas en el txt en la matriz de adyacencia\n        por lo que las letras de los nodos seran de A : D\n    \"\"\"\n    num_colonies = len(graph)\n    nodes = [chr(65 + i) for i in range(num_colonies)]\n    # Variables para almacenar el peso mínimo y el recorrido óptimo\n    min_path = maxsize",
+        "peekOfCode": "def calcularDistancias(grafoDistancias, numColonias):\n    \"\"\"\n    Imprime las distancias entre cada par de colonias en un formato legible.\n    Parámetros:\n        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.\n        numColonias (int): El número total de colonias.\n    \"\"\"\n    print(\"Número de nodos:\", numColonias)\n    print(\"\\nKms de colonia a colonia\\n\")\n    n = grafoDistancias.shape[0]",
         "detail": "SegundoAlgoritmo",
         "documentation": {}
     },
     {
-        "label": "bfs",
+        "label": "colonyTravel",
+        "kind": 2,
+        "importPath": "SegundoAlgoritmo",
+        "description": "SegundoAlgoritmo",
+        "peekOfCode": "def colonyTravel(graph, start):\n    \"\"\"\n    Para el caso actual, hay 4 filas en el archivo txt en la matriz de adyacencia,\n    por lo que las letras de los nodos serán de A a D.\n    \"\"\"\n    numColonies = len(graph)\n    nodes = [chr(65 + i) for i in range(numColonies)]\n    # Variables para almacenar el peso mínimo y el recorrido óptimo\n    minPath = maxsize\n    optimalPath = []",
+        "detail": "SegundoAlgoritmo",
+        "documentation": {}
+    },
+    {
+        "label": "bfsFlowMax",
         "kind": 2,
         "importPath": "TercerAlgoritmo",
         "description": "TercerAlgoritmo",
-        "peekOfCode": "def bfs(capacity, source, sink, parent):\n    visited = [False] * len(capacity)\n    queue = deque([source])\n    visited[source] = True\n    while queue:\n        u = queue.popleft()\n        for v, cap in enumerate(capacity[u]):\n            if not visited[v] and cap > 0:\n                queue.append(v)\n                visited[v] = True",
+        "peekOfCode": "def bfsFlowMax(capacity, source, sink, parent):\n    visited = [False] * len(capacity)\n    queue = deque([source])\n    visited[source] = True\n    while queue:\n        u = queue.popleft()\n        for v, cap in enumerate(capacity[u]):\n            if not visited[v] and cap > 0:\n                queue.append(v)\n                visited[v] = True",
         "detail": "TercerAlgoritmo",
         "documentation": {}
     },
     {
-        "label": "ford_fulkerson",
+        "label": "fordFulkersonFlowMax",
         "kind": 2,
         "importPath": "TercerAlgoritmo",
         "description": "TercerAlgoritmo",
-        "peekOfCode": "def ford_fulkerson(capacity, source, sink):\n    parent = [-1] * len(capacity)\n    max_flow = 0\n    while bfs(capacity, source, sink, parent):\n        path_flow = float('Inf')\n        s = sink\n        while s != source:\n            path_flow = min(path_flow, capacity[parent[s]][s])\n            s = parent[s]\n        v = sink",
+        "peekOfCode": "def fordFulkersonFlowMax(capacity, source, sink):\n    parent = [-1] * len(capacity)\n    maxFlow = 0\n    while bfsFlowMax(capacity, source, sink, parent):\n        pathFlow = float('Inf')\n        s = sink\n        while s != source:\n            pathFlow = min(pathFlow, capacity[parent[s]][s])\n            s = parent[s]\n        v = sink",
         "detail": "TercerAlgoritmo",
         "documentation": {}
     },
@@ -205,7 +257,7 @@
         "kind": 2,
         "importPath": "TercerAlgoritmo",
         "description": "TercerAlgoritmo",
-        "peekOfCode": "def main():\n    with open(\"input.txt\", \"r\") as archivoEntrada:\n        # Leer el número de colonias\n        numColonias = int(archivoEntrada.readline().strip())\n        # Leer la matriz de capacidades de flujo\n        grafoCapacidades = []\n        for _ in range(numColonias):\n            fila = list(map(int, archivoEntrada.readline().strip().split()))\n            grafoCapacidades.append(fila)\n        grafoCapacidades = np.array(grafoCapacidades)",
+        "peekOfCode": "def main():\n    with open(\"input.txt\", \"r\") as archivoEntrada:\n        # Leer el número de colonias\n        numColonias = int(archivoEntrada.readline().strip())\n        # Leer la matriz de capacidades de flujo\n        grafoCapacidades = []\n        for _ in range(numColonias):\n            fila = list(map(int, archivoEntrada.readline().strip().split()))\n            grafoCapacidades.append(fila)\n        # Leer las capacidades máximas de transmisión",
         "detail": "TercerAlgoritmo",
         "documentation": {}
     }

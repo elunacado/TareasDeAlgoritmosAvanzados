@@ -1,6 +1,3 @@
-# Programa para mostrar las distancias entre colonias y el cableado óptimo de fibra óptica
-# Autor: [Tu Nombre]
-# Fecha: [Fecha de hoy]
 # Descripción: Este programa lee una matriz de adyacencia que representa distancias entre colonias,
 # muestra todas las distancias en un formato organizado y luego calcula el MST usando el Algoritmo de Prim.
 
