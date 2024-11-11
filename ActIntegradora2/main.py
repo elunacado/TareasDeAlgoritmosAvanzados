@@ -15,6 +15,32 @@ import sys
 from scipy.spatial import KDTree
 import math
 
+def calcularDistancias(grafoDistancias, numColonias):
+    """
+    Imprime las distancias entre cada par de colonias en un formato legible.
+
+    Parámetros:
+        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.
+        numColonias (int): El número total de colonias.
+    """
+    print("Número de nodos:", numColonias)
+    print("\nKms de colonia a colonia\n")
+    
+    n = grafoDistancias.shape[0]
+    
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                grafoDistancias[i][j] = min(grafoDistancias[i][j], grafoDistancias[i][k] + grafoDistancias[k][j])
+    
+    for i in range(n):
+        for j in range(n):
+            if i != j:
+                print(f"{chr(i + 65)} - {chr(j + 65)} \t{grafoDistancias[i][j]} km")
+        print()
+
+    return grafoDistancias
+
 # Función para encontrar el árbol de expansión mínima (Problema 1)
 def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
     """
@@ -200,6 +226,8 @@ def main():
 
     grafoDistancias = np.array(grafoDistancias)
     grafoCapacidades = np.array(grafoCapacidades)    
+    
+    grafoDistancias = calcularDistancias(grafoDistancias, numColonias)
     
     # Problema 1: Calcular el MST para cableado óptimo
     calcularMst(grafoDistancias, numColonias)

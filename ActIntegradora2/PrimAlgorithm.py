@@ -7,7 +7,7 @@
 import sys
 import numpy as np
 
-def imprimirDistancias(grafoDistancias, numColonias):
+def calcularDistancias(grafoDistancias, numColonias):
     """
     Imprime las distancias entre cada par de colonias en un formato legible.
 
@@ -18,11 +18,20 @@ def imprimirDistancias(grafoDistancias, numColonias):
     print("Número de nodos:", numColonias)
     print("\nKms de colonia a colonia\n")
     
-    for i in range(numColonias):
-        for j in range(numColonias):
+    n = grafoDistancias.shape[0]
+    
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                grafoDistancias[i][j] = min(grafoDistancias[i][j], grafoDistancias[i][k] + grafoDistancias[k][j])
+    
+    for i in range(n):
+        for j in range(n):
             if i != j:
-                print(f"Km de colonia {chr(65 + i)} a colonia {chr(65 + j)}: {grafoDistancias[i][j]}")
-        print()  # Salto de línea entre cada grupo de conexiones
+                print(f"{chr(i + 65)} - {chr(j + 65)} \t{grafoDistancias[i][j]} km")
+        print()
+
+    return grafoDistancias
 
 def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
     valorMinimo = sys.maxsize
@@ -82,7 +91,7 @@ def main():
     grafoDistancias = np.array(grafoDistancias)
 
     # Imprimir las distancias entre cada colonia
-    imprimirDistancias(grafoDistancias, numColonias)
+    grafoDistancias = calcularDistancias(grafoDistancias, numColonias)
 
     # Calcular el MST para el cableado óptimo
     calcularMst(grafoDistancias, numColonias)

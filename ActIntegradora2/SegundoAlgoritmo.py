@@ -1,5 +1,32 @@
 from sys import maxsize
+import numpy as np
 from itertools import permutations
+
+def calcularDistancias(grafoDistancias, numColonias):
+    """
+    Imprime las distancias entre cada par de colonias en un formato legible.
+
+    Parámetros:
+        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.
+        numColonias (int): El número total de colonias.
+    """
+    print("Número de nodos:", numColonias)
+    print("\nKms de colonia a colonia\n")
+    
+    n = grafoDistancias.shape[0]
+    
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                grafoDistancias[i][j] = min(grafoDistancias[i][j], grafoDistancias[i][k] + grafoDistancias[k][j])
+    
+    for i in range(n):
+        for j in range(n):
+            if i != j:
+                print(f"{chr(i + 65)} - {chr(j + 65)} \t{grafoDistancias[i][j]} km")
+        print()
+
+    return grafoDistancias
 
 """ 
 Función para encontrar el camino más corto entre colonias.
@@ -62,15 +89,17 @@ if __name__ == "__main__":
         numColonies = int(file.readline().strip())
         
         # Lee la matriz de adyacencia
-        graph = []
+        grafoDistancias = []
         for _ in range(numColonies):
             row = list(map(int, file.readline().strip().split()))
-            graph.append(row)
+            grafoDistancias.append(row)
+        
+        grafoDistancias = np.array(grafoDistancias)
 
     # Iniciamos en la colonia A
     startColony = 0
-
+    grafoDistancias = calcularDistancias(grafoDistancias,numColonies)
     # Llama a la función para obtener el costo mínimo y el camino
-    minCost, path = colonyTravel(graph, startColony)
+    minCost, path = colonyTravel(grafoDistancias, startColony)
     print(f"Costo mínimo: {minCost}")
     print(f"Recorrido óptimo: {' -> '.join(path)}")
