@@ -54,7 +54,14 @@ def main():
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoCapacidades.append(fila)
         
-        grafoCapacidades = np.array(grafoCapacidades)
+        # Capacidades maximas de transmision
+        grafoCapTransmision = []
+        for _ in range(numColonias):
+            fila = list(map(int, archivoEntrada.readline().strip().split()))
+            grafoCapTransmision.append(fila)
+                
+        grafoCapacidades    = np.array(grafoCapacidades)
+        grafoCapTransmision = np.array(grafoCapTransmision)
 
     source = 0  # Nodo inicial
     sink = numColonias - 1  # Nodo final
