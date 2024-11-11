@@ -11,17 +11,20 @@ from sys import maxsize
 import numpy as np
 from itertools import permutations
 from collections import deque
-import sys
 from scipy.spatial import KDTree
 import math
 
 def calcularDistancias(grafoDistancias, numColonias):
     """
-    Imprime las distancias entre cada par de colonias en un formato legible.
+    Calcula e imprime las distancias entre cada par de colonias siguiendo el algoritmo
+    Floyd-Warshall.
 
     Parámetros:
-        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.
-        numColonias (int): El número total de colonias.
+        grafoDistancias (np.array): Matriz de adyacencia con las distancias entre colonias.
+        numColonias (int): Número total de colonias.
+    
+    Retorno:
+        np.array: Matriz de distancias actualizada con las distancias más cortas.
     """
     print("Número de nodos:", numColonias)
     print("\nKms de colonia a colonia\n")
@@ -41,12 +44,19 @@ def calcularDistancias(grafoDistancias, numColonias):
 
     return grafoDistancias
 
-# Función para encontrar el árbol de expansión mínima (Problema 1)
 def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
     """
     Encuentra la colonia con el valor de llave mínimo que aún no está incluida en el MST.
+    
+    Parámetros:
+        valoresLlave (list): Lista con los valores mínimos de cada nodo.
+        incluidoEnMst (list): Lista booleana que indica si el nodo está en el MST.
+        numColonias (int): Número total de colonias.
+
+    Retorno:
+        int: El índice de la colonia con el valor de llave mínimo.
     """
-    valorMinimo = sys.maxsize
+    valorMinimo = maxsize
     indiceMinimo = -1
     
     for colonia in range(numColonias):
@@ -58,7 +68,12 @@ def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
 
 def mostrarMst(coloniaPadre, grafoDistancias, numColonias):
     """
-    Imprime las conexiones (aristas) y pesos del Árbol de Expansión Mínima (MST).
+    Imprime las conexiones y pesos del Árbol de Expansión Mínima (MST).
+
+    Parámetros:
+        coloniaPadre (list): Lista que almacena el nodo padre de cada colonia en el MST.
+        grafoDistancias (np.array): Matriz de adyacencia de distancias entre colonias.
+        numColonias (int): Número total de colonias.
     """
     print("\nCableado óptimo de fibra óptica:")
     print("Conexión \tDistancia")
@@ -68,8 +83,12 @@ def mostrarMst(coloniaPadre, grafoDistancias, numColonias):
 def calcularMst(grafoDistancias, numColonias):
     """
     Calcula el Árbol de Expansión Mínima (MST) usando el Algoritmo de Prim.
+
+    Parámetros:
+        grafoDistancias (np.array): Matriz de adyacencia de distancias entre colonias.
+        numColonias (int): Número total de colonias.
     """
-    valoresLlave = [sys.maxsize] * numColonias
+    valoresLlave = [maxsize] * numColonias
     coloniaPadre = [-1] * numColonias
     incluidoEnMst = [False] * numColonias
 
@@ -86,168 +105,191 @@ def calcularMst(grafoDistancias, numColonias):
 
     mostrarMst(coloniaPadre, grafoDistancias, numColonias)
 
-# Función para calcular el camino más corto que visita cada colonia exactamente una vez (Problema 2)
-def colonyTravel(graph, start):
+def calcularRutaMinima(grafo, inicio):
     """
     Calcula la ruta óptima para visitar cada colonia una vez y regresar al inicio.
+
+    Parámetros:
+        grafo (np.array): Matriz de adyacencia de distancias entre colonias.
+        inicio (int): Índice de la colonia inicial.
+    
+    Retorno:
+        tuple: (costo mínimo, lista de nombres de colonias en el recorrido óptimo).
     """
-    num_colonies = len(graph)
-    nodes = [chr(65 + i) for i in range(num_colonies)]  # Nombres de las colonias (A, B, C...)
+    numColonias = len(grafo)
+    nodos = [chr(65 + i) for i in range(numColonias)]
+    minPath = maxsize
+    optimalPath = []
 
-    min_path = maxsize
-    optimal_path = []
-
-    vertices = [i for i in range(num_colonies) if i != start]
+    vertices = [i for i in range(numColonias) if i != inicio]
 
     for perm in permutations(vertices):
-        current_travel = 0
-        current_path = [start] + list(perm) + [start]
+        currentTravel = 0
+        currentPath = [inicio] + list(perm) + [inicio]
 
-        for i in range(len(current_path) - 1):
-            current_travel += graph[current_path[i]][current_path[i + 1]]
+        for i in range(len(currentPath) - 1):
+            currentTravel += grafo[currentPath[i]][currentPath[i + 1]]
 
-        if current_travel < min_path:
-            min_path = current_travel
-            optimal_path = current_path
+        if currentTravel < minPath:
+            minPath = currentTravel
+            optimalPath = currentPath
 
-    optimal_path_names = [nodes[i] for i in optimal_path]
+    optimalPathNames = [nodos[i] for i in optimalPath]
 
-    return min_path, optimal_path_names
+    return minPath, optimalPathNames
 
-# BFS para encontrar un camino aumentante en el grafo de capacidad residual
-def bfs(capacity, source, sink, parent):
-    visited = [False] * len(capacity)
-    queue = deque([source])
-    visited[source] = True
+def busquedaEnAnchura(capacidad, origen, destino, padre):
+    """
+    Realiza una búsqueda en anchura (BFS) para encontrar un camino aumentante en el grafo de capacidad residual.
+
+    Parámetros:
+        capacidad (np.array): Matriz de capacidad residual entre colonias.
+        origen (int): Nodo de origen para la búsqueda.
+        destino (int): Nodo de destino para la búsqueda.
+        padre (list): Lista que registra el camino encontrado.
+
+    Retorno:
+        bool: True si se encuentra un camino aumentante, False en caso contrario.
+    """
+    visitado = [False] * len(capacidad)
+    cola = deque([origen])
+    visitado[origen] = True
     
-    while queue:
-        u = queue.popleft()
+    while cola:
+        nodoActual = cola.popleft()
         
-        for v, cap in enumerate(capacity[u]):
-            if not visited[v] and cap > 0:
-                queue.append(v)
-                visited[v] = True
-                parent[v] = u
-                if v == sink:
+        for nodoVecino, capRes in enumerate(capacidad[nodoActual]):
+            if not visitado[nodoVecino] and capRes > 0:
+                cola.append(nodoVecino)
+                visitado[nodoVecino] = True
+                padre[nodoVecino] = nodoActual
+                if nodoVecino == destino:
                     return True
     return False
 
-# Algoritmo Ford-Fulkerson para calcular el flujo máximo
-def ford_fulkerson(capacity, source, sink):
-    parent = [-1] * len(capacity)
-    max_flow = 0
-    
-    while bfs(capacity, source, sink, parent):
-        path_flow = float('Inf')
-        s = sink
-        while s != source:
-            path_flow = min(path_flow, capacity[parent[s]][s])
-            s = parent[s]
-        
-        v = sink
-        while v != source:
-            u = parent[v]
-            capacity[u][v] -= path_flow
-            capacity[v][u] += path_flow
-            v = parent[v]
-        
-        max_flow += path_flow
-    
-    return max_flow
-
-# Algoritmo para encontrar la distancia más corta entre dos centrales en base a la cantidad de centrales que se tengan
-def findingShortestDistanceToColony(plants, newPlant, limit = 1000):
+def fordFulkerson(capacidad, origen, destino):
     """
-    Encuentra la central más cercana a la nueva contratación
-    Esto se realiza utilizando la búsqueda lineal mediante la fórmula de distancia euclideana
-    O un KD Tree en el caso de que la cantidad de centrales sea mayor al límite establecido
-    Al combinar ambos algoritmos se busca mantener la mejor complejidad temporal en cualquier caso
-    
-    Si el número de centrales es menor al límite seleccionado utiliza búsqueda lineal
-    Si el número de centrales es mayor o igual al límite, utiliza un KD Tree
-    
-    Parameters:
-    - plants: lista de tuplas que representan las coordenadas de las centrales (x, y)
-    - newPlant: tupla que representa la ubicación de la nueva contratación (nx, ny)
-    - limit: número de puntos / cantidad de centrales a partir del cual se decide usar KD Tree
-    
-    Return:
-    - La distancia más corta y las coordenadas de la central más cercana
-    """
-    if len(plants) < limit:
-        minDistance = float('inf')
-        closestPlant = None
+    Calcula el flujo máximo en un grafo usando el Algoritmo de Ford-Fulkerson.
 
-        for plant in plants:
-            distance = math.sqrt(pow(plant[0] - newPlant[0], 2) + pow(plant[1] - newPlant[1], 2))
-            if distance < minDistance:
-                minDistance = distance
-                closestPlant = plant
+    Parámetros:
+        capacidad (np.array): Matriz de capacidades entre colonias.
+        origen (int): Nodo de origen.
+        destino (int): Nodo de destino.
+    
+    Retorno:
+        int: Valor del flujo máximo entre el nodo de origen y el nodo de destino.
+    """
+    padre = [-1] * len(capacidad)
+    flujoMaximo = 0
+    
+    while busquedaEnAnchura(capacidad, origen, destino, padre):
+        flujoCamino = float('Inf')
+        nodoActual  = destino
+        while nodoActual  != origen:
+            flujoCamino = min(flujoCamino, capacidad[padre[nodoActual ]][nodoActual ])
+            nodoActual  = padre[nodoActual ]
         
-        return minDistance, closestPlant
+        nodoActualizar = destino
+        while nodoActualizar != origen:
+            nodoAnterior = padre[nodoActualizar]
+            capacidad[nodoAnterior][nodoActualizar] -= flujoCamino
+            capacidad[nodoActualizar][nodoAnterior] += flujoCamino
+            nodoActualizar = padre[nodoActualizar]
+        
+        flujoMaximo += flujoCamino
+    
+    return flujoMaximo
+
+def encontrarDistanciaCorta(centrales, nuevaCentral, limite=1000):
+    """
+    Encuentra la central más cercana a la nueva contratación usando búsqueda lineal o KDTree.
+
+    Parámetros:
+        centrales (lista de tuplas): Coordenadas de las centrales existentes.
+        nuevaCentral (tupla): Coordenadas de la nueva central.
+        limite (int): Límite de centrales para elegir entre búsqueda lineal o KDTree.
+    
+    Retorno:
+        tupla: Distancia más corta y coordenadas de la central más cercana.
+    """
+    if len(centrales) < limite:
+        distanciaMinima = float('inf')
+        centralMasCercana = None
+
+        for central in centrales:
+            distancia = math.sqrt((central[0] - nuevaCentral[0]) ** 2 + (central[1] - nuevaCentral[1]) ** 2)
+            if distancia < distanciaMinima:
+                distanciaMinima = distancia
+                centralMasCercana = central
+        
+        return distanciaMinima, centralMasCercana
     
     else:
-        plantsKDTree = KDTree(plants)
+        centralesKDTree = KDTree(centrales)
+        distancia, indice = centralesKDTree.query(nuevaCentral)
+        centralMasCercana = centrales[indice]
 
-        distance, index = plantsKDTree.query(newPlant)
+        return distancia, centralMasCercana
 
-        closestPlant = plants[index]
-
-        return distance, closestPlant
-
-# Función principal
 def main():
     """
-    Función principal para ejecutar ambos problemas:
-    1. Calcular la ruta óptima para visitar cada colonia exactamente una vez.
-    2. Encontrar el Árbol de Expansión Mínima (MST) para cableado óptimo.
-    3. Calcular el flujo máximo de información entre el nodo inicial y final.
-    4. Encontrar la distancia más corta entre la nueva contratación y las centrales existentes.
+    Función principal para ejecutar todos los problemas relacionados con el cableado óptimo,
+    la ruta de visita a colonias, el cálculo de flujo máximo y la distancia a la central más cercana.
+
+    Parámetros:
+        None
+    
+    Retorno:
+        None
     """
     with open("input.txt", "r") as archivoEntrada:
         numColonias = int(archivoEntrada.readline().strip())
+        
+        # Lectura de la matriz de distancias
         grafoDistancias = []
-
         for _ in range(numColonias):
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoDistancias.append(fila)
 
+        # Lectura de la matriz de capacidades
         grafoCapacidades = []
         for _ in range(numColonias):
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoCapacidades.append(fila)
 
-        plants = []
+        # Lectura de las coordenadas de las centrales
+        centrales = []
         for _ in range(numColonias):
             x, y = map(int, archivoEntrada.readline().strip('()\n').split(','))
-            plants.append((x, y))
+            centrales.append((x, y))
 
-        newPlant = tuple(map(int, archivoEntrada.readline().strip('()\n').split(',')))
+        # Lectura de la coordenada de la nueva central
+        nuevaCentral = tuple(map(int, archivoEntrada.readline().strip('()\n').split(',')))
 
     grafoDistancias = np.array(grafoDistancias)
     grafoCapacidades = np.array(grafoCapacidades)    
     
     grafoDistancias = calcularDistancias(grafoDistancias, numColonias)
     
-    # Problema 1: Calcular el MST para cableado óptimo
+    # Problema 1: Calcular el Árbol de Expansión Mínima (MST) para cableado óptimo
     calcularMst(grafoDistancias, numColonias)
 
     # Problema 2: Calcular la ruta óptima de visita a colonias
-    start_colony = 0
-    min_cost, path = colonyTravel(grafoDistancias, start_colony)
+    coloniaInicio = 0
+    costoMinimo, recorrido = calcularRutaMinima(grafoDistancias, coloniaInicio)
     print("\nRuta de visita a colonias:")
-    print(f"Costo mínimo: {min_cost}")
-    print(f"Recorrido óptimo: {' -> '.join(path)}\n")
+    print(f"Costo mínimo: {costoMinimo}")
+    print(f"Recorrido óptimo: {' -> '.join(recorrido)}\n")
 
     # Problema 3: Calcular el flujo máximo de información
-    source = 0  # Nodo inicial
-    sink = numColonias - 1  # Nodo final
-    max_flow = ford_fulkerson(grafoCapacidades, source, sink)
-    print(f"El flujo máximo de información desde el nodo inicial al nodo final es: {max_flow}\n")
+    origen = 0  # Nodo inicial
+    destino = numColonias - 1  # Nodo final
+    flujoMaximo = fordFulkerson(grafoCapacidades, origen, destino)
+    print(f"El flujo máximo de información desde el nodo inicial al nodo final es: {flujoMaximo}\n")
 
     # Problema 4: Encontrar la distancia más corta entre dos puntos
-    distance, closestPlant = findingShortestDistanceToColony(plants, newPlant)
-    print(f"La central más cercana a {list(newPlant)} es {list(closestPlant)} con una distancia de {distance:.3f}.")
+    distancia, centralMasCercana = encontrarDistanciaCorta(centrales, nuevaCentral)
+    print(f"La central más cercana a {list(nuevaCentral)} es {list(centralMasCercana)} con una distancia de {distancia:.3f}.")
 
 if __name__ == "__main__":
     main()
