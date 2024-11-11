@@ -1,4 +1,5 @@
 from collections import deque
+from itertools import permutations
 import numpy as np
 
 # BFS para encontrar un camino aumentante en el grafo de capacidad residual
@@ -54,12 +55,20 @@ def main():
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoCapacidades.append(fila)
         
-        grafoCapacidades = np.array(grafoCapacidades)
+        # Capacidades maximas de transmision
+        grafoCapTransmision = []
+        for _ in range(numColonias):
+            fila = list(map(int, archivoEntrada.readline().strip().split()))
+            grafoCapTransmision.append(fila)
+                
+        grafoCapacidades    = np.array(grafoCapacidades)
+        grafoCapTransmision = np.array(grafoCapTransmision)
 
-    source = 0  # Nodo inicial
-    sink = numColonias - 1  # Nodo final
-    max_flow = ford_fulkerson(grafoCapacidades, source, sink)
-    print(f"El flujo máximo de información desde el nodo inicial al nodo final es: {max_flow}")
-
+    for perm in permutations(np.arange(numColonias),2):
+        source = perm[0]  # Nodo inicial
+        sink   = perm[1]  # Nodo final
+        max_flow = ford_fulkerson(grafoCapTransmision, source, sink)
+        print(f"El flujo máximo de información desde el nodo inicial {source} al nodo final {sink} es: {max_flow}")
+        
 if __name__ == "__main__":
     main()
