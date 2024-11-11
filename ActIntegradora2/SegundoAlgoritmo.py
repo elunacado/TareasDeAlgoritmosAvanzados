@@ -1,69 +1,76 @@
 from sys import maxsize
 from itertools import permutations
 
-#Funcion para encontrar el camino mas corto
+""" 
+Función para encontrar el camino más corto entre colonias.
+Parámetros:
+- graph: matriz que representa las distancias entre colonias.
+- start: nodo de inicio para el recorrido.
+Retorno:
+- minPath: costo mínimo del recorrido.
+- optimalPathNames: lista con los nombres de colonias en el recorrido óptimo.
+"""
 def colonyTravel(graph, start):
-    #Asignamos letras a las colonias
     """
-        Para el caso actual hay 4 filas en el txt en la matriz de adyacencia
-        por lo que las letras de los nodos seran de A : D
+    Para el caso actual, hay 4 filas en el archivo txt en la matriz de adyacencia,
+    por lo que las letras de los nodos serán de A a D.
     """
-    num_colonies = len(graph)
-    nodes = [chr(65 + i) for i in range(num_colonies)]
+    numColonies = len(graph)
+    nodes = [chr(65 + i) for i in range(numColonies)]
 
     # Variables para almacenar el peso mínimo y el recorrido óptimo
-    min_path = maxsize
-    optimal_path = []
+    minPath = maxsize
+    optimalPath = []
 
-    # Lista de colonias excluyendo la de inicio
     """
-        Como ya tenemos el punto de salida del tecnico, se excluye de la lista de colonias
-        por que ya lo conocemos
+    Lista de colonias excluyendo la de inicio.
+    Como ya tenemos el punto de salida del técnico, se excluye de la lista de colonias
+    porque ya lo conocemos.
     """
-    vertices = [i for i in range(num_colonies) if i != start]
+    vertices = [i for i in range(numColonies) if i != start]
 
     # Genera todas las combinaciones posibles de las colonias
     for perm in permutations(vertices):
         """
-            El viaje inicia en la colonia A, por lo que se agrega al inicio de la lista
-            se toma la primera combinacion de colonias y se agrega al final de la lista
-            despes se vuelve a agregar la colonia 0 para cerrar el ciclo
+        El viaje inicia en la colonia A, por lo que se agrega al inicio de la lista.
+        Se toma la primera combinación de colonias y se agrega al final de la lista,
+        después se vuelve a agregar la colonia 0 para cerrar el ciclo.
         """
-        current_travel = 0
-        current_path = [start] + list(perm) + [start]
+        currentTravel = 0
+        currentPath = [start] + list(perm) + [start]
 
-        # Calcula el peso del camino actual le restamos 1 porque queremos empezar desde el 0
-        for i in range(len(current_path) - 1):
-            #Calculamos el peso del viaje
-            current_travel += graph[current_path[i]][current_path[i + 1]]
+        # Calcula el peso del camino actual
+        for i in range(len(currentPath) - 1):
+            # Calculamos el peso del viaje
+            currentTravel += graph[currentPath[i]][currentPath[i + 1]]
 
-        # Si el peso del camino actual es menor que el mínimo, actualiza min_path y guarda el camino
-        if current_travel < min_path:
-            min_path = current_travel
-            optimal_path = current_path
+        # Si el peso del camino actual es menor que el mínimo, actualiza minPath y guarda el camino
+        if currentTravel < minPath:
+            minPath = currentTravel
+            optimalPath = currentPath
 
     # Convierte el camino óptimo a nombres de colonias
-    optimal_path_names = [nodes[i] for i in optimal_path]
+    optimalPathNames = [nodes[i] for i in optimalPath]
 
-    return min_path, optimal_path_names
+    return minPath, optimalPathNames
 
 # Código principal
 if __name__ == "__main__":
     # Lee el archivo input.txt
-    with open('input.txt', 'r') as file:
+    with open("input.txt", "r") as file:
         # Lee el número de colonias
-        num_colonies = int(file.readline().strip())
+        numColonies = int(file.readline().strip())
         
         # Lee la matriz de adyacencia
         graph = []
-        for _ in range(num_colonies):
+        for _ in range(numColonies):
             row = list(map(int, file.readline().strip().split()))
             graph.append(row)
 
     # Iniciamos en la colonia A
-    start_colony = 0
+    startColony = 0
 
     # Llama a la función para obtener el costo mínimo y el camino
-    min_cost, path = colonyTravel(graph, start_colony)
-    print(f"Costo mínimo: {min_cost}")
+    minCost, path = colonyTravel(graph, startColony)
+    print(f"Costo mínimo: {minCost}")
     print(f"Recorrido óptimo: {' -> '.join(path)}")
