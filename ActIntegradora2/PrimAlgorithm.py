@@ -1,24 +1,30 @@
-# Programa para cableado óptimo de fibra óptica
-# Autor:
-# Fecha: 
-# Descripción: Este programa lee una matriz de adyacencia que representa distancias entre colonias
-# y calcula la cantidad mínima de cable necesario para conectar todas las colonias usando el Algoritmo de Prim.
+# Programa para mostrar las distancias entre colonias y el cableado óptimo de fibra óptica
+# Autor: [Tu Nombre]
+# Fecha: [Fecha de hoy]
+# Descripción: Este programa lee una matriz de adyacencia que representa distancias entre colonias,
+# muestra todas las distancias en un formato organizado y luego calcula el MST usando el Algoritmo de Prim.
 
 import sys
 import numpy as np
 
-def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
+def imprimirDistancias(grafoDistancias, numColonias):
     """
-    Encuentra la colonia con el valor de llave mínimo que aún no está incluida en el MST.
+    Imprime las distancias entre cada par de colonias en un formato legible.
 
     Parámetros:
-        valoresLlave (lista): El peso de la conexión más corta a cada colonia.
-        incluidoEnMst (lista): Indica si una colonia está incluida en el MST.
+        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.
         numColonias (int): El número total de colonias.
-
-    Retorna:
-        int: El índice de la colonia con el valor de llave mínimo.
     """
+    print("Número de nodos:", numColonias)
+    print("\nKms de colonia a colonia\n")
+    
+    for i in range(numColonias):
+        for j in range(numColonias):
+            if i != j:
+                print(f"Km de colonia {chr(65 + i)} a colonia {chr(65 + j)}: {grafoDistancias[i][j]}")
+        print()  # Salto de línea entre cada grupo de conexiones
+
+def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
     valorMinimo = sys.maxsize
     indiceMinimo = -1
     
@@ -38,26 +44,20 @@ def mostrarMst(coloniaPadre, grafoDistancias, numColonias):
         grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.
         numColonias (int): El número total de colonias.
     """
+    print("\nCableado óptimo de fibra óptica:")
     print("Conexión \tDistancia")
     for colonia in range(1, numColonias):
         print(f"{chr(coloniaPadre[colonia] + 65)} - {chr(colonia + 65)} \t{grafoDistancias[colonia][coloniaPadre[colonia]]} km")
 
 def calcularMst(grafoDistancias, numColonias):
-    """
-    Calcula el Árbol de Expansión Mínima (MST) usando el Algoritmo de Prim.
+    valoresLlave = [sys.maxsize] * numColonias
+    coloniaPadre = [-1] * numColonias
+    incluidoEnMst = [False] * numColonias
 
-    Parámetros:
-        grafoDistancias (matriz 2D): La matriz de adyacencia con distancias.
-        numColonias (int): El número total de colonias.
-    """
-    valoresLlave = [sys.maxsize] * numColonias  # Valores iniciales grandes
-    coloniaPadre = [-1] * numColonias           # Almacena el MST
-    incluidoEnMst = [False] * numColonias       # Controla las colonias incluidas
-
-    valoresLlave[0] = 0                         # Empezamos desde la primera colonia
+    valoresLlave[0] = 0
 
     for _ in range(numColonias - 1):
-        u = encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias)  # Encuentra la colonia no conectada más cercana
+        u = encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias)
         incluidoEnMst[u] = True
 
         for v in range(numColonias):
@@ -69,19 +69,22 @@ def calcularMst(grafoDistancias, numColonias):
 
 def main():
     """
-    Función principal para leer el archivo de entrada, construir el grafo de distancias y calcular el MST.
+    Función principal para leer el archivo de entrada, imprimir las distancias entre colonias y calcular el MST.
     """
     with open("input.txt", "r") as archivoEntrada:
-        numColonias = int(archivoEntrada.readline().strip())  # Lee el número de colonias
+        numColonias = int(archivoEntrada.readline().strip())
         grafoDistancias = []
 
         for _ in range(numColonias):
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoDistancias.append(fila)
 
-        grafoDistancias = np.array(grafoDistancias)  # Convierte la lista a un arreglo 2D
+    grafoDistancias = np.array(grafoDistancias)
 
-    print("Cableado óptimo de fibra óptica:")
+    # Imprimir las distancias entre cada colonia
+    imprimirDistancias(grafoDistancias, numColonias)
+
+    # Calcular el MST para el cableado óptimo
     calcularMst(grafoDistancias, numColonias)
 
 if __name__ == "__main__":
