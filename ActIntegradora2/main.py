@@ -10,6 +10,8 @@ import numpy as np
 from itertools import permutations
 from collections import deque
 import sys
+from scipy.spatial import KDTree
+import math
 
 # Función para encontrar el árbol de expansión mínima (Problema 1)
 def encontrarLlaveMinima(valoresLlave, incluidoEnMst, numColonias):
@@ -125,6 +127,29 @@ def ford_fulkerson(capacity, source, sink):
     
     return max_flow
 
+# Algoritmo para encontrar la distancia más corta entre dos centrales en base a la cantidad de centrales que se tengan
+def findingShortestDistanceToColony(plants, newPlant, limit = 1000):
+    if len(plants) < limit:
+        minDistance = float('inf')
+        closestPlant = None
+
+        for plant in plants:
+            distance = math.sqrt(pow(plant[0] - newPlant[0], 2) + pow(plant[1] - newPlant[1], 2))
+            if distance < minDistance:
+                minDistance = distance
+                closestPlant = plant
+        
+        return minDistance, closestPlant
+    
+    else:
+        plantsKDTree = KDTree(plants)
+
+        distance, index = plantsKDTree.query(newPlant)
+
+        closestPlant = plants[index]
+
+        return distance, closestPlant
+
 # Función principal
 def main():
     """
@@ -132,6 +157,7 @@ def main():
     1. Calcular la ruta óptima para visitar cada colonia exactamente una vez.
     2. Encontrar el Árbol de Expansión Mínima (MST) para cableado óptimo.
     3. Calcular el flujo máximo de información entre el nodo inicial y final.
+    4. Encontrar la distancia más corta entre la nueva contratación y las centrales existentes.
     """
     with open("input.txt", "r") as archivoEntrada:
         numColonias = int(archivoEntrada.readline().strip())
@@ -145,6 +171,13 @@ def main():
         for _ in range(numColonias):
             fila = list(map(int, archivoEntrada.readline().strip().split()))
             grafoCapacidades.append(fila)
+
+        plants = []
+        for _ in range(numColonias):
+            x, y = map(int, archivoEntrada.readline().strip('()\n').split(','))
+            plants.append((x, y))
+
+        newPlant = tuple(map(int, archivoEntrada.readline().strip('()\n').split(',')))
 
     grafoDistancias = np.array(grafoDistancias)
     grafoCapacidades = np.array(grafoCapacidades)    
@@ -164,6 +197,10 @@ def main():
     sink = numColonias - 1  # Nodo final
     max_flow = ford_fulkerson(grafoCapacidades, source, sink)
     print(f"El flujo máximo de información desde el nodo inicial al nodo final es: {max_flow}")
+
+    # Problema 4: Encontrar la distancia más corta entre dos puntos
+    distance, closestPlant = findingShortestDistanceToColony(plants, newPlant)
+    print(f"La central más cercana a {list(newPlant)} es {list(closestPlant)} con una distancia de {distance:.3f}.")
 
 if __name__ == "__main__":
     main()
