@@ -15,11 +15,12 @@ def calcularDistancias(grafoDistancias, numColonias):
     
     n = grafoDistancias.shape[0]
     
+    #Encontramos el camino mas corto usando el algoritmo de Floyd-Warshall
     for k in range(n):
         for i in range(n):
             for j in range(n):
                 grafoDistancias[i][j] = min(grafoDistancias[i][j], grafoDistancias[i][k] + grafoDistancias[k][j])
-    
+    #Asignamos letras a las colonias
     for i in range(n):
         for j in range(n):
             if i != j:
